@@ -27,12 +27,18 @@ import {
   migrateV7,
 } from './migrate';
 
+// Add right sidebar state to StoreState type
 export type StoreState = ChatSlice &
   InputSlice &
   AuthSlice &
   ConfigSlice &
   PromptSlice &
-  ToastSlice;
+  ToastSlice & {
+    showRightSidebar: boolean;
+    rightSidebarWidth: number;
+    toggleRightSidebar: () => void;
+    setRightSidebarWidth: (width: number) => void;
+  };
 
 export type StoreSlice<T> = (
   set: StoreApi<StoreState>['setState'],
@@ -59,6 +65,9 @@ export const createPartializedState = (state: StoreState) => ({
   markdownMode: state.markdownMode,
   totalTokenUsed: state.totalTokenUsed,
   countTotalTokens: state.countTotalTokens,
+  // Add right sidebar state to persisted state
+  showRightSidebar: state.showRightSidebar,
+  rightSidebarWidth: state.rightSidebarWidth,
 });
 
 const useStore = create<StoreState>()(
@@ -70,6 +79,14 @@ const useStore = create<StoreState>()(
       ...createConfigSlice(set, get),
       ...createPromptSlice(set, get),
       ...createToastSlice(set, get),
+      
+      // Add right sidebar state and actions
+      showRightSidebar: false,
+      rightSidebarWidth: 300,
+      toggleRightSidebar: () => set((state) => ({ 
+        showRightSidebar: !state.showRightSidebar 
+      })),
+      setRightSidebarWidth: (width) => set({ rightSidebarWidth: width }),
     }),
     {
       name: 'free-chat-gpt',
