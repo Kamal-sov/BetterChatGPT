@@ -7,7 +7,7 @@ const RightSidebar = () => {
   if (!showRightSidebar) return null;
 
   return (
-    <div 
+    <div
       className="h-full bg-gray-50 border-l border-gray-200 flex flex-col"
       style={{ width: `${rightSidebarWidth}px` }}
     >
@@ -15,7 +15,7 @@ const RightSidebar = () => {
         <h2 className="font-semibold">Tools</h2>
       </div>
       <div className="flex-1 overflow-y-auto">
-        {/* Your custom content here */}
+        {/* Content will go here */}
       </div>
     </div>
   );
