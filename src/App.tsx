@@ -4,6 +4,7 @@ import i18n from './i18n';
 
 import Chat from '@components/Chat';
 import Menu from '@components/Menu';
+import RightSidebar from '@components/RightSidebar'; // New import
 
 import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
 import { ChatInterface } from '@type/chat';
@@ -17,6 +18,7 @@ function App() {
   const setTheme = useStore((state) => state.setTheme);
   const setApiKey = useStore((state) => state.setApiKey);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
+  const showRightSidebar = useStore((state) => state.showRightSidebar); // New state
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -32,19 +34,16 @@ function App() {
     const theme = localStorage.getItem('theme');
 
     if (apiKey) {
-      // legacy local storage
       setApiKey(apiKey);
       localStorage.removeItem('apiKey');
     }
 
     if (theme) {
-      // legacy local storage
       setTheme(theme as Theme);
       localStorage.removeItem('theme');
     }
 
     if (oldChats) {
-      // legacy local storage
       try {
         const chats: ChatInterface[] = JSON.parse(oldChats);
         if (chats.length > 0) {
@@ -59,7 +58,6 @@ function App() {
       }
       localStorage.removeItem('chats');
     } else {
-      // existing local storage
       const chats = useStore.getState().chats;
       const currentChatIndex = useStore.getState().currentChatIndex;
       if (!chats || chats.length === 0) {
@@ -75,9 +73,18 @@ function App() {
   }, []);
 
   return (
-    <div className='overflow-hidden w-full h-full relative'>
+    <div className='overflow-hidden w-full h-full relative flex'>
+      {/* Left Sidebar */}
       <Menu />
-      <Chat />
+      
+      {/* Main Chat Area */}
+      <div className='flex-1'>
+        <Chat />
+      </div>
+      
+      {/* Right Sidebar - Conditionally Rendered */}
+      {showRightSidebar && <RightSidebar />}
+      
       <ApiPopup />
       <Toast />
     </div>
