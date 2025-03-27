@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-
 import useStore from '@store/store';
 
 import NewChat from './NewChat';
@@ -10,10 +9,13 @@ import MenuOptions from './MenuOptions';
 import CrossIcon2 from '@icon/CrossIcon2';
 import DownArrow from '@icon/DownArrow';
 import MenuIcon from '@icon/MenuIcon';
+import SidebarToggleIcon from '@icon/SidebarToggleIcon'; // You'll need to create this
 
 const Menu = () => {
   const hideSideMenu = useStore((state) => state.hideSideMenu);
   const setHideSideMenu = useStore((state) => state.setHideSideMenu);
+  const showRightSidebar = useStore((state) => state.showRightSidebar);
+  const toggleRightSidebar = useStore((state) => state.toggleRightSidebar);
 
   const windowWidthRef = useRef<number>(window.innerWidth);
 
@@ -39,9 +41,21 @@ const Menu = () => {
         <div className='flex h-full min-h-0 flex-col'>
           <div className='flex h-full w-full flex-1 items-start border-white/20'>
             <nav className='flex h-full flex-1 flex-col space-y-1 px-2 pt-2'>
-              <div className='flex gap-2'>
-                <NewChat />
-                <NewFolder />
+              {/* Add Right Sidebar Toggle Button */}
+              <div className='flex justify-between items-center mb-2'>
+                <div className='flex gap-2'>
+                  <NewChat />
+                  <NewFolder />
+                </div>
+                <button
+                  onClick={toggleRightSidebar}
+                  className='p-1 rounded-md hover:bg-gray-700 text-white'
+                  title={showRightSidebar ? 'Hide right sidebar' : 'Show right sidebar'}
+                >
+                  <SidebarToggleIcon className={`h-4 w-4 transition-transform ${
+                    showRightSidebar ? 'rotate-180' : ''
+                  }`} />
+                </button>
               </div>
               <ChatHistoryList />
               <MenuOptions />
