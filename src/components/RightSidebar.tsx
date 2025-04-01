@@ -1,24 +1,27 @@
 import React from 'react';
-import { useStore } from '@store/store';
+import useStore from '@store/store';
 
-const RightSidebar = () => {
-  const { showRightSidebar, rightSidebarWidth } = useStore();
+import ChatContent from './ChatContent';
+import MobileBar from '../MobileBar';
+import StopGeneratingButton from '@components/StopGeneratingButton/StopGeneratingButton';
 
-  if (!showRightSidebar) return null;
+const Chat = () => {
+  const hideSideMenu = useStore((state) => state.hideSideMenu);
 
   return (
     <div
-      className="h-full bg-gray-50 border-l border-gray-200 flex flex-col"
-      style={{ width: `${rightSidebarWidth}px` }}
+      className={`flex h-full flex-1 flex-col ${
+        hideSideMenu ? 'md:pl-0' : 'md:pl-[260px]'
+      }`}
     >
-      <div className="p-4 border-b">
-        <h2 className="font-semibold">Tools</h2>
-      </div>
-      <div className="flex-1 overflow-y-auto">
-        {/* Content will go here */}
-      </div>
+      <MobileBar />
+      <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
+        <ChatContent />
+        <StopGeneratingButton />
+      </main>
     </div>
   );
 };
 
-export default RightSidebar;
+export default Chat;
+
